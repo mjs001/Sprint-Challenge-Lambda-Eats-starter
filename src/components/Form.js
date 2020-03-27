@@ -37,7 +37,7 @@ function Form() {
   });
 
   const formSchema = Yup.object().shape({
-    name: Yup.string().required("Must include your name."),
+    name: Yup.string().min(2, "must be atleast 2 characters long"),
     size: Yup.string(),
     olives: Yup.boolean(),
     peppers: Yup.boolean(),
@@ -56,28 +56,28 @@ function Form() {
     special: ""
   });
 
-  useEffect(() => {
-    formSchema.isValid(formState).then(valid => {
-      setButtonDisabled(!valid);
-    });
-  }, [formState]);
-
-  // const validateChange = e => {
-  //   Yup.reach(formSchema, e.target.name)
-  //     .validate(e.target.name === "terms" ? e.target.checked : e.target.value)
-  //     .then(valid => {
-  //       setErrors({
-  //         ...errors,
-  //         [e.target.name]: ""
-  //       });
-  //     })
-  //     .catch(err => {
-  //       setErrors({
-  //         ...errors,
-  //         [e.target.name]: err.errors[0]
-  //       });
+  //   useEffect(() => {
+  //     formSchema.isValid(formState).then(valid => {
+  //       setButtonDisabled(!valid);
   //     });
-  // };
+  //   }, [formState]);
+
+  const validateChange = e => {
+    Yup.reach(formSchema, e.target.name)
+      .validate(e.target.name === "terms" ? e.target.checked : e.target.value)
+      .then(valid => {
+        setErrors({
+          ...errors,
+          [e.target.name]: ""
+        });
+      })
+      .catch(err => {
+        setErrors({
+          ...errors,
+          [e.target.name]: err.errors[0]
+        });
+      });
+  };
   const inputChange = e => {
     e.persist();
     const newFormData = {
@@ -85,7 +85,7 @@ function Form() {
       [e.target.name]:
         e.target.type === "checkbox" ? e.target.checked : e.target.value
     };
-    //   validateChange(e);
+    validateChange(e);
     setFormState(newFormData);
   };
 
@@ -99,6 +99,7 @@ function Form() {
           value={formState.name}
           onChange={inputChange}
         />
+        {errors.name.length > 2 ? <p className="error">{errors.name}</p> : null}
       </label>
       <select id="size" name="size">
         <option value="small" name="small" placeholder="small">
@@ -161,7 +162,7 @@ function Form() {
           onChange={inputChange}
         />
       </label>
-      <button disabled={buttonDisabled}>Submit</button>
+      <button>Submit</button>
       <pre>{JSON.stringify(post, null, 2)}</pre>
     </form>
   );
