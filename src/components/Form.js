@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import * as Yup from "yup";
 
 function Form() {
   const [post, setPost] = useState([]);
@@ -20,7 +22,6 @@ function Form() {
           special: ""
         });
         console.log("success", res);
-        console.log("users", users);
       })
       .catch(err => console.log(err.response));
   };
@@ -100,13 +101,19 @@ function Form() {
         />
       </label>
       <select id="size" name="size">
-        <option value="small" />
-        <option value="medium" />
-        <option value="large" />
+        <option value="small" name="small" placeholder="small">
+          small
+        </option>
+        <option value="medium" name="medium" placeholder="medium">
+          medium
+        </option>
+        <option value="large">large</option>
+        value={formState.size}
+        onChange={inputChange}
       </select>
 
       <label htmlFor="olives">
-        Do you agree to the terms?
+        olives
         <input
           type="checkbox"
           name="olives"
@@ -116,7 +123,7 @@ function Form() {
       </label>
 
       <label htmlFor="peppers">
-        Do you agree to the terms?
+        peppers
         <input
           type="checkbox"
           name="peppers"
@@ -126,7 +133,7 @@ function Form() {
       </label>
 
       <label htmlFor="onions">
-        Do you agree to the terms?
+        onions
         <input
           type="checkbox"
           name="onions"
@@ -136,7 +143,7 @@ function Form() {
       </label>
 
       <label htmlFor="beef">
-        Do you agree to the terms?
+        beef
         <input
           type="checkbox"
           name="beef"
